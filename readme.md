@@ -1,4 +1,3 @@
-::: {align="center"}
 # ✨ Todo App --- Cloud Native Deployment
 
 **A clean, containerized task manager deployed on Amazon EKS with Redis,
@@ -11,7 +10,7 @@ Kubernetes autoscaling, and CloudWatch monitoring.**
 [![AWS](https://img.shields.io/badge/AWS-Cloud-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)](https://aws.amazon.com/)
 :::
 
-------------------------------------------------------------------------
+---
 
 ## 📌 Overview
 
@@ -33,20 +32,9 @@ health probes, Horizontal Pod Autoscaling (HPA), and cloud monitoring.
 The interface includes a task summary, task creation with priority
 selection, search, status filters, completion toggles, and task removal.
 
-```{=html}
-<!-- Add your application screenshot to the repository, for example: docs/todo-app-preview.png -->
-```
-```{=html}
-<p align="center">
-```
-`<em>`{=html}Add your application screenshot here:
-`<code>`{=html}docs/todo-app-preview.png`</code>`{=html}`</em>`{=html}
-```{=html}
-</p>
-```
 ## 🏗️ Architecture
 
-``` mermaid
+```mermaid
 flowchart LR
     U[User / Browser] --> LB[AWS LoadBalancer Service]
     LB --> APP[Todo App Pod<br/>Node.js + Express]
@@ -74,67 +62,62 @@ flowchart LR
 
 ## 🧰 Tech Stack
 
-  Component                  Technology
-  -------------------------- -----------------------------------------
-  Frontend                   HTML, CSS, JavaScript
-  Application server / API   Node.js, Express
-  Task data store            Redis
-  Containerization           Docker
-  Container registry         Amazon Elastic Container Registry (ECR)
-  Kubernetes                 Amazon EKS
-  Scaling                    Kubernetes Horizontal Pod Autoscaler
-  Monitoring                 Amazon CloudWatch
-  Local orchestration        Docker Compose
+Component Technology
+
+---
+
+Frontend HTML, CSS, JavaScript
+Application server / API Node.js, Express
+Task data store Redis
+Containerization Docker
+Container registry Amazon Elastic Container Registry (ECR)
+Kubernetes Amazon EKS
+Scaling Kubernetes Horizontal Pod Autoscaler
+Monitoring Amazon CloudWatch
+Local orchestration Docker Compose
 
 ## 📁 Repository Structure
 
-``` text
+```text
 todo-app/
 ├── app.js
 ├── index.html
 ├── server.js
 ├── Dockerfile
 ├── docker-compose.yml
-├── k8s/
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   └── hpa.yaml
-├── docs/
-│   └── todo-app-preview.png
-├── load-test.ps1
 ├── .gitignore
 └── README.md
 ```
 
-*Keep the file names and paths in this diagram aligned with the files
+_Keep the file names and paths in this diagram aligned with the files
 actually committed to the repository. Remove any entries you have not
-created.*
+created._
 
 ## 🚀 Run Locally
 
 ### Prerequisites
 
--   [Docker Desktop](https://www.docker.com/products/docker-desktop/)
--   Git
--   Node.js is only needed if you want to run the server outside Docker.
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- Git
+- Node.js is only needed if you want to run the server outside Docker.
 
 ### Start with Docker Compose
 
 From the project root:
 
-``` bash
+```bash
 docker compose up --build
 ```
 
 Open the application at:
 
-``` text
+```text
 http://localhost:3000
 ```
 
 Stop the local services with:
 
-``` bash
+```bash
 docker compose down
 ```
 
@@ -149,21 +132,21 @@ The deployment was created in the AWS **Sydney region**
 
 ### Resources used
 
--   **Amazon ECR:** stores the `todo-app` container image.
--   **Amazon EKS:** runs the Kubernetes cluster named `todo-lab`.
--   **Kubernetes Deployment:** manages the Todo and Redis pods.
--   **Kubernetes Services:** exposes the Todo app using a LoadBalancer
-    and provides internal Redis access using ClusterIP.
--   **HPA:** targets 50% CPU utilization and permits 1--5 Todo replicas.
--   **CloudWatch:** provides metrics and dashboarding for the cluster
-    and worker node.
+- **Amazon ECR:** stores the `todo-app` container image.
+- **Amazon EKS:** runs the Kubernetes cluster named `todo-lab`.
+- **Kubernetes Deployment:** manages the Todo and Redis pods.
+- **Kubernetes Services:** exposes the Todo app using a LoadBalancer
+  and provides internal Redis access using ClusterIP.
+- **HPA:** targets 50% CPU utilization and permits 1--5 Todo replicas.
+- **CloudWatch:** provides metrics and dashboarding for the cluster
+  and worker node.
 
 ### Deploy the Kubernetes manifests
 
 After configuring `kubectl` for your own EKS cluster and confirming that
 the image URI in the manifest points to your ECR repository:
 
-``` bash
+```bash
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/hpa.yaml
@@ -171,7 +154,7 @@ kubectl apply -f k8s/hpa.yaml
 
 Check the rollout and current resources:
 
-``` bash
+```bash
 kubectl get nodes
 kubectl get deployments
 kubectl get pods
@@ -181,13 +164,13 @@ kubectl get hpa
 
 Watch autoscaling activity:
 
-``` bash
+```bash
 kubectl get hpa todo-app --watch
 ```
 
 Retrieve the public service hostname:
 
-``` bash
+```bash
 kubectl get service todo-app
 ```
 
@@ -206,10 +189,10 @@ replicas**.
 
 The application Deployment should include:
 
--   CPU request and limit settings.
--   Memory request and limit settings.
--   A readiness probe to determine when a pod can receive traffic.
--   A liveness probe to detect a container that needs restarting.
+- CPU request and limit settings.
+- Memory request and limit settings.
+- A readiness probe to determine when a pod can receive traffic.
+- A liveness probe to detect a container that needs restarting.
 
 The HPA calculates CPU utilization relative to the configured CPU
 request. Removing the CPU request can prevent utilization-based scaling
@@ -242,14 +225,14 @@ application and observe HPA behavior.
 
 Watch the HPA in one terminal:
 
-``` powershell
+```powershell
 kubectl get hpa todo-app -w
 ```
 
 In another terminal, run your configured load-generation script, for
 example:
 
-``` powershell
+```powershell
 .\load-test.ps1
 ```
 
@@ -274,14 +257,14 @@ are no longer needed.
 
 Review the resources first:
 
-``` bash
+```bash
 aws eks list-nodegroups --cluster-name todo-lab --region ap-southeast-2
 aws eks list-clusters --region ap-southeast-2
 ```
 
 Delete the node group before deleting the cluster:
 
-``` bash
+```bash
 aws eks delete-nodegroup \
   --cluster-name todo-lab \
   --nodegroup-name todo-workers \
@@ -304,35 +287,39 @@ remove resources used by other projects.
 
 ## 📚 Assignment Coverage
 
-  -----------------------------------------------------------------------
-  Requirement                         Project evidence
-  ----------------------------------- -----------------------------------
-  Docker image build                  Docker build completed successfully
+---
 
-  Local app and Redis containers      Shown running in Docker Desktop
+Requirement Project evidence
 
-  Image in container registry         `todo-app:1.0` pushed to Amazon ECR
+---
 
-  Kubernetes deployment               Todo and Redis pods running on EKS
+Docker image build Docker build completed successfully
 
-  Service exposure                    Todo LoadBalancer and Redis
-                                      ClusterIP
+Local app and Redis containers Shown running in Docker Desktop
 
-  HPA configuration                   Minimum 1, maximum 5 replicas; 50%
-                                      CPU target
+Image in container registry `todo-app:1.0` pushed to Amazon ECR
 
-  Autoscaling under load              HPA showed 79% CPU and scaled from
-                                      1 to 2 replicas
+Kubernetes deployment Todo and Redis pods running on EKS
 
-  Cloud monitoring                    CloudWatch dashboard with API
-                                      request count and EC2 CPU
+Service exposure Todo LoadBalancer and Redis
+ClusterIP
 
-  Alert email                         Not confirmed by the supplied
-                                      evidence
+HPA configuration Minimum 1, maximum 5 replicas; 50%
+CPU target
 
-  P95 latency and per-pod memory      Not shown in the supplied dashboard
-  graphs                              evidence
-  -----------------------------------------------------------------------
+Autoscaling under load HPA showed 79% CPU and scaled from
+1 to 2 replicas
+
+Cloud monitoring CloudWatch dashboard with API
+request count and EC2 CPU
+
+Alert email Not confirmed by the supplied
+evidence
+
+P95 latency and per-pod memory Not shown in the supplied dashboard
+graphs evidence
+
+---
 
 ## 👤 Author
 
@@ -340,9 +327,7 @@ remove resources used by other projects.
 
 Cloud Computing Lab Project --- Todo Application on AWS
 
-------------------------------------------------------------------------
+---
 
-::: {align="center"}
 **Built to practice containerization, Kubernetes orchestration,
 autoscaling, and cloud monitoring.**
-:::
